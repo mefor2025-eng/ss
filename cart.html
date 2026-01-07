@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="container row">
+
+  <!-- DELIVERY DETAILS -->
+  <div class="col card">
+    <h2>Delivery Details</h2>
+
+    <input id="cust_name" placeholder="Full Name">
+    <input id="cust_phone" placeholder="Phone Number">
+    <textarea id="cust_address" placeholder="House / Street"></textarea>
+    <input id="cust_city" placeholder="City">
+    <input id="cust_pincode" placeholder="Pincode">
+
+    <button class="btn-primary" onclick="placeOrder()">Place Order</button>
+  </div>
+
+  <!-- ORDER SUMMARY -->
+  <div class="col card">
+    <h2>Your Order</h2>
+    <div id="order_items"></div>
+    <hr>
+    <strong>Total: ₹<span id="order_total">0</span></strong>
+  </div>
+
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzuaL5BfyvFJVQ1AWCU7ZN8-LXehqbhjRhaItEtILJLwBC31K166aBP0W1mB2C_ngxe/exec";
+const cart = JSON.parse(sessionStorage.getItem("cart") || "[]");
+
+/* Render cart */
+let total = 0;
+order_items.innerHTML = cart.map(p => {
+  total += Number(p[2]);
+  return `
+    <div class="cart-item">
+      <img src="${p[6].split(',')[0]}">
+      <div>
+        <div>${p[1]}</div>
+        <div>₹${p[2]}</div>
+      </div>
+    </div>
+  `;
+}).join("");
+
+order_total.innerText = total;
+
+/* Place order */
+function placeOrder() {
+  const name = cust_name.value.trim();
+  const phone = cust_phone.value.trim();
+  const address = cust_address.value.trim();
+  const city = cust_city.value.trim();
+  const pincode = cust_pincode.value.trim();
+
+  if (!name || !phone || !address || !city || !pincode) {
+    alert("All fields are required");
+    return;
+  }
+
+  /* 1️⃣ Open WhatsApp (user action → allowed) */
+  const message =
+    `New Order%0A` +
+    `Name: ${name}%0A` +
+    `Phone: ${phone}%0A` +
+    `Address: ${address}, ${city} - ${pincode}%0A` +
+    `Total: ₹${total}`;
+
+  window.open(
+    `https://wa.me/919847420195?text=${message}`,
+    "_blank"
+  );
+
+  /* 2️⃣ Save order to Google Sheet */
+  const url =
+    `${API}?action=order` +
+    `&name=${encodeURIComponent(name)}` +
+    `&phone=${encodeURIComponent(phone)}` +
+    `&address=${encodeURIComponent(address)}` +
+    `&city=${encodeURIComponent(city)}` +
+    `&pincode=${encodeURIComponent(pincode)}` +
+    `&items=${encodeURIComponent(JSON.stringify(cart))}` +
+    `&total=${encodeURIComponent(total)}`;
+
+  fetch(url);
+
+  alert("Order placed successfully");
+  sessionStorage.removeItem("cart");
+}
+</script>
+
+</body>
+</html>
