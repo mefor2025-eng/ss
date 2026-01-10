@@ -1,35 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Sign Up</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
 <div class="container">
-  <div class="card" style="max-width:420px;margin:auto">
-    <h2>Create Account</h2>
+  <div class="card">
+    <h2>Sign Up</h2>
 
-    <form
-      action="https://script.google.com/macros/s/AKfycbxv4KLNaAvQcvi71r1pQiJZPIUALwV2g5DsF8MRTDYi5iB6HV1a-wHrNmRgXw9TGeqm/exec"
-      method="GET"
-      target="_top"
-    >
-      <input type="hidden" name="action" value="signup">
+    <input id="phone" placeholder="Phone number">
+    <input id="password" type="password" placeholder="Password">
 
-      <input name="phone" placeholder="Phone number" required>
-      <input name="password" type="password" placeholder="Password" required>
-
-      <button class="btn-primary" type="submit">Sign Up</button>
-    </form>
-
-    <br>
-    <a href="login.html">Already have an account?</a>
+    <button class="btn-primary" onclick="signup()">Create</button>
+    <p>Already have an account? <a href="index.html">Login</a></p>
   </div>
 </div>
 
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
+
+function signup() {
+  fetch(`${API}?action=signup&phone=${phone.value}&password=${password.value}`)
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) {
+        alert("Sign up successful");
+        location.href = "index.html";
+      } else {
+        alert("Phone already exists");
+      }
+    });
+}
+</script>
+
 </body>
 </html>
-
