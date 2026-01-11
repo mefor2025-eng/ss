@@ -1,73 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="UTF-8">
+<title>Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<div class="container row">
+<header class="header">Checkout</header>
 
-  <div class="col card">
-    <h2>Checkout</h2>
-
-    <input id="cust_name" placeholder="Full Name">
-    <input id="cust_phone" placeholder="Phone number">
-    <textarea id="cust_address" placeholder="Address"></textarea>
-    <input id="cust_city" placeholder="City">
-    <input id="cust_pincode" placeholder="Pincode">
-
-    <button class="btn-primary" onclick="placeOrder()">Place Order</button>
-  </div>
-
-  <div class="col card">
-    <h2>Your Order</h2>
-    <div id="order_items"></div>
-    <hr>
-    <strong>Total: ₹<span id="total">0</span></strong>
-  </div>
-
+<div class="container">
+  <input id="name" placeholder="Full Name">
+  <input id="phone" placeholder="Phone Number">
+  <textarea id="address" placeholder="Address"></textarea>
+  <input id="city" placeholder="City">
+  <input id="pincode" placeholder="Pincode">
+  <button onclick="placeOrder()">Place Order</button>
 </div>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
-const cart = JSON.parse(sessionStorage.getItem("cart") || "[]");
-
-let total = 0;
-order_items.innerHTML = cart.map(p => {
-  total += Number(p[2]);
-  return `
-    <div class="cart-item">
-      <img src="${p[6].split(',')[0]}">
-      <div>${p[1]}<br>₹${p[2]}</div>
-    </div>
-  `;
-}).join("");
-
-total.innerText = total;
 
 function placeOrder() {
-  const name = cust_name.value.trim();
-  const phone = cust_phone.value.trim();
-  const address = cust_address.value.trim();
-  const city = cust_city.value.trim();
-  const pincode = cust_pincode.value.trim();
+  const params = new URLSearchParams({
+    action: "order",
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    city: city.value,
+    pincode: pincode.value,
+    items: "1 item",
+    total: "999"
+  });
 
-  if (!name || !phone || !address || !city || !pincode) {
-    alert("All fields required");
-    return;
-  }
-
-  /* WhatsApp Open */
-  window.open(
-    `https://wa.me/919847420195?text=New order from ${phone}`,
-    "_blank"
-  );
-
-  /* Save to Sheet */
-  fetch(`${API}?action=order&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}&pincode=${encodeURIComponent(pincode)}&items=${encodeURIComponent(JSON.stringify(cart))}&total=${encodeURIComponent(total)}`)
-    .then(() => alert("Order placed!"))
-    .catch(() => alert("Order failed"));
+  fetch(API + "?" + params.toString())
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      alert("Order placed successfully");
+    } else {
+      alert(res.message);
+    }
+  });
 }
 </script>
 
