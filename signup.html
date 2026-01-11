@@ -1,23 +1,24 @@
+<!-- signup.html -->
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Signup</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="assets/style.css">
-</head>
+<head><link rel="stylesheet" href="assets/style.css"></head>
 <body>
-
-<h2>Create Account</h2>
-
+<h2>Signup</h2>
 <input id="phone" placeholder="Phone">
 <input id="password" type="password" placeholder="Password">
-<input id="name" placeholder="Full Name">
+<input id="name" placeholder="Name">
 <textarea id="address" placeholder="Address"></textarea>
 <input id="city" placeholder="City">
 <input id="pincode" placeholder="Pincode">
-
-<button onclick="signup()">Signup</button>
-
+<button onclick="go()">Create Account</button>
 <script src="assets/app.js"></script>
+<script>
+function go(){
+fetch(API+"?"+new URLSearchParams({
+action:"signup", phone:phone.value, password:password.value,
+name:name.value, address:address.value, city:city.value, pincode:pincode.value
+})).then(r=>r.json()).then(j=>alert(j.success?"Done":j.error));
+}
+</script>
 </body>
 </html>
