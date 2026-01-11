@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Product</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/style.css">
+  <title>Product – WASE</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
-
 <body>
 
-<header class="header">
-  <a href="index.html"><b>WASE</b></a>
-  <a href="cart.html">Cart</a>
+<header class="topbar">
+  <a href="products.html">← Back</a>
 </header>
 
-<div class="container" id="product"></div>
+<div class="product-page">
+  <div class="gallery">
+    <img id="mainImage">
+    <div id="thumbs"></div>
+  </div>
 
+  <div class="details">
+    <h1 id="name"></h1>
+    <p class="price" id="price"></p>
+    <p id="desc"></p>
+
+    <button onclick="addToCart()">Add to Cart</button>
+  </div>
+</div>
+
+<h3 class="similar-title">Similar Products</h3>
+<section class="grid" id="similar"></section>
+
+<script src="assets/app.js"></script>
 <script>
-const API="https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
-const id=new URLSearchParams(location.search).get("id");
-
-fetch(API+"?action=product&id="+id)
-.then(r=>r.json())
-.then(p=>{
-  document.getElementById("product").innerHTML=`
-    <img src="${p[6].split(',')[0]}" style="width:100%;max-height:350px;object-fit:cover">
-    <h2>${p[1]}</h2>
-    <h3>₹${p[2]}</h3>
-    <p>${p[3]}</p>
-    <button class="btn" onclick="buy()">Buy Now</button>
-  `;
-});
-
-function buy(){
-  localStorage.setItem("cart",id);
-  location.href="cart.html";
-}
+loadProduct();
 </script>
 
 </body>
