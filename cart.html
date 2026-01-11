@@ -1,49 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Checkout</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/style.css">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
-
 <body>
 
-<header class="header">
-  <a href="index.html"><b>WASE</b></a>
-</header>
-
-<div class="container">
 <h2>Delivery Details</h2>
 
-<input placeholder="Name" id="name"><br><br>
-<input placeholder="Phone" id="phone"><br><br>
-<textarea placeholder="Address" id="address"></textarea><br><br>
-<input placeholder="City" id="city"><br><br>
-<input placeholder="Pincode" id="pin"><br><br>
+<input id="name" placeholder="Full Name">
+<input id="phone" placeholder="Phone Number">
+<textarea id="address" placeholder="Address"></textarea>
+<input id="city" placeholder="City">
+<input id="pincode" placeholder="Pincode">
 
-<button class="btn" onclick="order()">Place Order</button>
-</div>
+<button onclick="placeOrder()">Place Order via WhatsApp</button>
 
-<script>
-const API="https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
-
-function order(){
-  const data={
-    action:"order",
-    phone:phone.value,
-    name:name.value,
-    address:address.value,
-    city:city.value,
-    pincode:pin.value,
-    items:localStorage.getItem("cart"),
-    total:0
-  };
-
-  fetch(API+"?"+new URLSearchParams(data))
-  .then(r=>r.text())
-  .then(()=>alert("Order placed"));
-}
-</script>
-
+<script src="assets/app.js"></script>
 </body>
 </html>
