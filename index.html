@@ -2,31 +2,29 @@
 <html>
 <head>
   <title>WASE</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-
-<header class="mobile-header">
+<header>
   <div class="logo">WASE</div>
-  <div class="auth-links">
+  <nav>
+    <a href="products.html">Shop</a>
     <a href="login.html">Login</a>
-    <a href="signup.html">Signup</a>
-  </div>
+    <a href="cart.html">Cart</a>
+  </nav>
 </header>
 
 <section class="hero">
-  <h1>Premium Black & White Store</h1>
-  <p>Minimal • Trusted • Fast</p>
-  <a href="products.html" class="btn">Shop Now</a>
+  <h1>New Offers Live</h1>
+  <p>Minimal • Premium • Black & White</p>
 </section>
 
-<section class="grid" id="featured"></section>
+<div class="container">
+  <h2>Top Products</h2>
+  <div class="grid" id="list"></div>
+</div>
 
 <script src="assets/app.js"></script>
-<script>
-loadProducts("featured", true);
-</script>
-
+<script>loadProducts(document.getElementById("list"));</script>
 </body>
 </html>
