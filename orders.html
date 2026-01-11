@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Orders</title>
-  <link rel="stylesheet" href="assets/style.css">
-</head>
+<head><link rel="stylesheet" href="assets/style.css"></head>
 <body>
-<header><a href="index.html">← Home</a></header>
-<div class="container" id="orders"></div>
-
+<h2>My Orders</h2>
+<div id="o"></div>
 <script src="assets/app.js"></script>
-<script>loadOrders();</script>
+<script>
+const phone=prompt("Enter phone to view orders");
+fetch(API+"?action=orders&phone="+phone).then(r=>r.json()).then(d=>{
+o.innerHTML=d.map(x=>`
+<div class="card">
+<b>${x[0]}</b><br>${x[6]}<br>₹${x[7]}<br>${x[8]}
+</div>`).join("");
+});
+</script>
 </body>
 </html>
