@@ -1,6 +1,6 @@
 const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
 
-function loadProducts(target, featured=false) {
+function loadProducts(target) {
   fetch(API + "?action=products")
     .then(r => r.json())
     .then(data => {
@@ -23,36 +23,25 @@ function loadProduct() {
       document.getElementById("price").innerText = "₹" + p[2];
       document.getElementById("desc").innerText = p[3];
 
-      const images = p.slice(6, 20).filter(Boolean);
-      document.getElementById("mainImage").src = images[0];
-
-      document.getElementById("thumbs").innerHTML = images.map(i =>
-        `<img src="${i}" onclick="document.getElementById('mainImage').src='${i}'">`
+      const imgs = p[6].split(",");
+      document.getElementById("mainImage").src = imgs[0];
+      document.getElementById("thumbs").innerHTML = imgs.map(i =>
+        `<img src="${i}" onclick="mainImage.src='${i}'">`
       ).join("");
 
-      localStorage.setItem("product", JSON.stringify(p));
+      localStorage.setItem("cart", JSON.stringify(p));
     });
 }
 
 function addToCart() {
-  localStorage.setItem("cart", localStorage.getItem("product"));
   location.href = "cart.html";
 }
 
 function placeOrder() {
-  const name = name.value;
-  const phone = phone.value;
-  const address = address.value;
-  const city = city.value;
-  const pincode = pincode.value;
+  const n = name.value, p = phone.value, a = address.value, c = city.value, z = pincode.value;
+  if (!n || !p || !a || !z) return alert("All fields required");
 
-  if (!name || !phone || !address || !pincode) {
-    alert("All fields required");
-    return;
-  }
-
-  const product = JSON.parse(localStorage.getItem("cart"));
-  const msg = `New Order\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city} - ${pincode}\nTotal: ₹${product[2]}`;
-
+  const prod = JSON.parse(localStorage.getItem("cart"));
+  const msg = `New Order\nName:${n}\nPhone:${p}\nAddress:${a}, ${c} - ${z}\nTotal:₹${prod[2]}`;
   window.open(`https://wa.me/919847420195?text=${encodeURIComponent(msg)}`);
 }
