@@ -1,34 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/style.css">
+  <title>Login</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<header class="header">Login</header>
+<h2>Login</h2>
 
-<div class="container">
-  <input id="phone" placeholder="Phone">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p><a href="signup.html">Create account</a></p>
-</div>
+<input id="phone" placeholder="Phone">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
 
-<script>
-const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
+<a href="signup.html">Create account</a>
 
-function login() {
-  fetch(API + `?action=login&phone=${phone.value}&password=${password.value}`)
-  .then(r => r.json())
-  .then(res => {
-    if (res.success) location.href = "products.html";
-    else alert(res.message);
-  });
-}
-</script>
-
+<script src="assets/app.js"></script>
 </body>
 </html>
