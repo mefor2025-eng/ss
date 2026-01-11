@@ -1,32 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Shop</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/style.css">
+  <title>Shop – WASE</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<header class="header">Shop</header>
+<header class="topbar">
+  <h1>Shop</h1>
+  <a href="cart.html">Cart</a>
+</header>
 
-<div class="container grid" id="products"></div>
+<section class="grid" id="list"></section>
 
+<script src="assets/app.js"></script>
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
-
-fetch(API + "?action=products")
-.then(r => r.json())
-.then(data => {
-  document.getElementById("products").innerHTML = data.map(p => `
-    <div class="card">
-      <img src="${p[6].split(',')[0]}">
-      <h3>${p[1]}</h3>
-      <p>₹${p[2]}</p>
-      <a class="link" href="product.html?id=${p[0]}">View Product</a>
-    </div>
-  `).join("");
-});
+loadProducts("list");
 </script>
 
 </body>
