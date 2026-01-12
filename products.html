@@ -3,18 +3,18 @@
 <head><link rel="stylesheet" href="assets/style.css"></head>
 <body>
 
-<header>
-  <div class="logo">Shop</div>
-</header>
-
+<header><div class="logo">Shop</div></header>
 <div class="grid" id="list"></div>
+
+<div class="bottom-nav">
+  <a href="index.html">Home</a>
+  <a href="products.html">Shop</a>
+  <a href="login.html">Login</a>
+</div>
 
 <script src="assets/app.js"></script>
 <script>
-(async()=>{
-  const products=await getProducts();
-  list.innerHTML=products.map(productCard).join("");
-})();
+getProducts().then(p=>list.innerHTML=p.map(productCard).join(""));
 </script>
 
 </body>
