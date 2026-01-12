@@ -1,8 +1,8 @@
-<!-- signup.html -->
 <!DOCTYPE html>
 <html>
 <head><link rel="stylesheet" href="assets/style.css"></head>
 <body>
+
 <h2>Signup</h2>
 <input id="phone" placeholder="Phone">
 <input id="password" type="password" placeholder="Password">
@@ -10,15 +10,17 @@
 <textarea id="address" placeholder="Address"></textarea>
 <input id="city" placeholder="City">
 <input id="pincode" placeholder="Pincode">
+
 <button onclick="go()">Create Account</button>
-<script src="assets/app.js"></script>
+
 <script>
 function go(){
-fetch(API+"?"+new URLSearchParams({
-action:"signup", phone:phone.value, password:password.value,
-name:name.value, address:address.value, city:city.value, pincode:pincode.value
-})).then(r=>r.json()).then(j=>alert(j.success?"Done":j.error));
+  fetch(APP_URL+"?"+new URLSearchParams({
+    action:"signup", phone:phone.value, password:password.value,
+    name:name.value, address:address.value, city:city.value, pincode:pincode.value
+  })).then(r=>r.json()).then(j=>alert(j.success?"Account created":j.error));
 }
 </script>
+
 </body>
 </html>
