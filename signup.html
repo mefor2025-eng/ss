@@ -1,24 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head><link rel="stylesheet" href="assets/style.css"></head>
+<head>
+  <title>Signup – WASE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
 <body>
 
-<h2>Signup</h2>
-<input id="phone" placeholder="Phone">
-<input id="password" type="password" placeholder="Password">
-<input id="name" placeholder="Name">
-<textarea id="address" placeholder="Address"></textarea>
-<input id="city" placeholder="City">
-<input id="pincode" placeholder="Pincode">
+<header>
+  <b>WASE</b>
+  <a href="login.html">Login</a>
+</header>
 
-<button onclick="go()">Create Account</button>
+<div class="container">
+  <h2>Create Account</h2>
+
+  <input id="name" placeholder="Full Name">
+  <input id="phone" placeholder="Phone number">
+  <input id="password" type="password" placeholder="Password">
+  <textarea id="address" placeholder="Full Address"></textarea>
+  <input id="city" placeholder="City">
+  <input id="pincode" placeholder="Pincode">
+
+  <button onclick="signup()">Signup</button>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html">🏠</a>
+  <a href="products.html">🛒</a>
+</div>
 
 <script>
-function go(){
-  fetch(APP_URL+"?"+new URLSearchParams({
-    action:"signup", phone:phone.value, password:password.value,
-    name:name.value, address:address.value, city:city.value, pincode:pincode.value
-  })).then(r=>r.json()).then(j=>alert(j.success?"Account created":j.error));
+const API="https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
+
+function signup(){
+  const data={
+    name:name.value.trim(),
+    phone:phone.value.trim(),
+    password:password.value.trim(),
+    address:address.value.trim(),
+    city:city.value.trim(),
+    pincode:pincode.value.trim()
+  };
+
+  if(Object.values(data).some(v=>!v)){
+    alert("All fields required");
+    return;
+  }
+
+  fetch(`${API}?action=signup&`+new URLSearchParams(data))
+    .then(r=>r.json())
+    .then(res=>{
+      if(res.success){
+        alert("Signup successful. Please login.");
+        location.href="login.html";
+      }else{
+        alert(res.error||"Signup failed");
+      }
+    });
 }
 </script>
 
