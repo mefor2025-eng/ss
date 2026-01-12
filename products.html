@@ -5,22 +5,9 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<header>Shop</header>
-<div class="grid" id="list"></div>
-
+<header><b>Shop</b></header>
+<div class="container"><div class="grid" id="list"></div></div>
 <script src="assets/app.js"></script>
-<script>
-fetch(API+"?action=products")
-.then(r=>r.json())
-.then(d=>{
-  list.innerHTML=d.map(p=>`
-    <a class="card" href="product.html?id=${p.id}">
-      <img src="${p.images[0]||''}">
-      <h3>${p.name}</h3>
-      <p>₹${p.price}</p>
-    </a>
-  `).join("");
-});
-</script>
+<script>loadProducts(document.getElementById("list"))</script>
 </body>
 </html>
