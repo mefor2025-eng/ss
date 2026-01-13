@@ -1,60 +1,38 @@
-const API="https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
+const API = "https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
 
-function hideBroken(img){img.onerror=()=>img.remove();}
-
-function qs(k){return new URLSearchParams(location.search).get(k)}
-
-function saveLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function getLS(k,d=[]){return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}
-
-/* PRODUCTS */
-async function loadProducts(el){
-  const res=await fetch(API+"?action=products");
-  const data=await res.json();
-  el.innerHTML=data.map(p=>`
-    <a href="product.html?id=${p.id}" class="card">
-      <img src="${p.images[0]||''}" onerror="hideBroken(this)">
-      <div class="card-body">
-        <div>${p.name}</div>
-        <div class="price">₹${p.price}</div>
-      </div>
-    </a>
-  `).join("");
+function hideBroken(img){
+  img.onerror=()=>img.style.display="none";
 }
 
-/* PRODUCT PAGE */
-async function loadProduct(){
-  const id=qs("id");
-  const res=await fetch(API+"?action=product&id="+id);
-  const p=await res.json();
-
-  document.getElementById("title").innerText=p.name;
-  document.getElementById("price").innerText="₹"+p.price;
-  document.getElementById("desc").innerText=p.desc;
-
-  const media=document.getElementById("media");
-  p.images.forEach(i=>{
-    const img=document.createElement("img");
-    img.src=i; img.onerror=()=>img.remove();
-    media.appendChild(img);
-  });
-  if(p.video){
-    media.innerHTML+=`<video controls src="${p.video}" width="100%"></video>`;
-  }
-
-  saveLS("cart",[p]);
+function getUser(){
+  return JSON.parse(localStorage.getItem("user")||"null");
 }
 
-/* ORDER */
-function placeOrder(){
-  const n=name.value,p=phone.value,a=address.value;
-  if(!n||!p||!a){alert("All fields required");return;}
+function loadProducts(target, limit=0){
+  fetch(API+"?action=products")
+    .then(r=>r.json())
+    .then(data=>{
+      if(limit) data=data.slice(0,limit);
+      target.innerHTML=data.map(p=>`
+        <div class="card" onclick="location.href='product.html?id=${p.id}'">
+          <img src="${p.images[0]||''}" onerror="hideBroken(this)">
+          <h3>${p.name}</h3>
+          <p>₹${p.price}</p>
+        </div>
+      `).join("");
+    });
+}
 
-  const items=getLS("cart");
-  const total=items.reduce((s,i)=>s+i.price,0);
+function addToCart(p){
+  localStorage.setItem("cart",JSON.stringify(p));
+  location.href="cart.html";
+}
 
-  fetch(API+"?action=order&phone="+p+"&name="+n+"&address="+a+"&items="+encodeURIComponent(JSON.stringify(items))+"&total="+total);
-
-  const msg=`New Order\nName: ${n}\nPhone: ${p}\nAddress: ${a}\nTotal: ₹${total}`;
-  location.href="https://wa.me/919847420195?text="+encodeURIComponent(msg);
+function whatsappOrder(order){
+  const msg = `New Order
+Name: ${order.name}
+Phone: ${order.phone}
+Address: ${order.address}, ${order.city} - ${order.pincode}
+Total: ₹${order.total}`;
+  window.open("https://wa.me/919847420195?text="+encodeURIComponent(msg));
 }
