@@ -1,17 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 <title>Checkout</title>
 <link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
 </head>
 <body>
+
 <header>Checkout</header>
-<div class="container">
-  <input id="name" placeholder="Full Name">
-  <input id="phone" placeholder="Phone">
-  <textarea id="address" placeholder="Full Address"></textarea>
-  <button onclick="placeOrder()">Place Order</button>
-</div>
-<script src="assets/app.js"></script>
+
+<form id="f">
+<input placeholder="Name" required>
+<input placeholder="Phone" required>
+<textarea placeholder="Address" required></textarea>
+<input placeholder="City" required>
+<input placeholder="Pincode" required>
+<button>Place Order</button>
+</form>
+
+<script>
+const cart=JSON.parse(localStorage.getItem("cart"));
+f.onsubmit=e=>{
+  e.preventDefault();
+  const d=[...f.elements].map(x=>x.value);
+  whatsappOrder({
+    name:d[0],phone:d[1],
+    address:d[2],city:d[3],pincode:d[4],
+    total:cart.price
+  });
+};
+</script>
+
 </body>
 </html>
