@@ -1,61 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Signup – WASE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="UTF-8">
+<title>Signup | WASE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
 </head>
 <body>
 
-<header>
-  <b>WASE</b>
-  <a href="login.html">Login</a>
-</header>
+<header>Create Account</header>
 
-<div class="container">
-  <h2>Create Account</h2>
-
-  <input id="name" placeholder="Full Name">
-  <input id="phone" placeholder="Phone number">
+<div class="grid" style="max-width:420px;margin:auto">
+  <input id="name" placeholder="Full name">
+  <input id="phone" placeholder="Phone number" inputmode="numeric">
   <input id="password" type="password" placeholder="Password">
-  <textarea id="address" placeholder="Full Address"></textarea>
+  <textarea id="address" placeholder="Full address"></textarea>
   <input id="city" placeholder="City">
-  <input id="pincode" placeholder="Pincode">
+  <input id="pincode" placeholder="Pincode" inputmode="numeric">
 
-  <button onclick="signup()">Signup</button>
-</div>
+  <button onclick="signup()">Create Account</button>
 
-<div class="bottom-nav">
-  <a href="index.html">🏠</a>
-  <a href="products.html">🛒</a>
+  <p style="text-align:center">
+    Already have an account?
+    <a href="login.html">Login</a>
+  </p>
 </div>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbyj4yPuQyJkLjy8kpXRs1cZZ3rZmxHSKwKTG6KHzLQ2QtpcJWw8q_bMW5esfYvhVAWQ/exec";
-
 function signup(){
-  const data={
-    name:name.value.trim(),
-    phone:phone.value.trim(),
-    password:password.value.trim(),
-    address:address.value.trim(),
-    city:city.value.trim(),
-    pincode:pincode.value.trim()
+  const data = {
+    name: name.value.trim(),
+    phone: phone.value.trim(),
+    password: password.value.trim(),
+    address: address.value.trim(),
+    city: city.value.trim(),
+    pincode: pincode.value.trim()
   };
 
-  if(Object.values(data).some(v=>!v)){
-    alert("All fields required");
-    return;
+  for(const k in data){
+    if(!data[k]){
+      alert("All fields required");
+      return;
+    }
   }
 
-  fetch(`${API}?action=signup&`+new URLSearchParams(data))
+  const q = Object.keys(data)
+    .map(k=>`${k}=${encodeURIComponent(data[k])}`)
+    .join("&");
+
+  fetch(API + "?action=signup&" + q)
     .then(r=>r.json())
     .then(res=>{
       if(res.success){
-        alert("Signup successful. Please login.");
+        alert("Account created. Please login.");
         location.href="login.html";
       }else{
-        alert(res.error||"Signup failed");
+        alert(res.error || "Signup failed");
       }
     });
 }
